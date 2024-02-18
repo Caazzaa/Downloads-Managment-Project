@@ -13,47 +13,33 @@ if __name__ == "__main__":
     my_event_handler = PatternMatchingEventHandler(patterns, ignore_patterns, ignore_directories, case_sensitive)
 
 def on_created(event):
-    check()
+    sort()
 
 def on_modified(event):
-    check()
+    sort()
 
 def on_moved(event):
-    check()
+    sort()
 
 def sort():
-    for imgDownload in os.listdir(downloads):
-        if imgDownload.endswith('.jpg') or imgDownload.endswith('.png') or imgDownload.endswith('.gif') or imgDownload.endswith('.webp') or imgDownload.endswith('.jpeg') or imgDownload.endswith('.raw'):
-            shutil.move(downloads + '/' + imgDownload, 'D:\DownloadedImages/' + imgDownload)
-            return 1
+    for download in os.listdir(downloads):
+        if download.endswith('.jpg') or download.endswith('.png') or download.endswith('.gif') or download.endswith('.webp') or download.endswith('.jpeg') or download.endswith('.raw') or download.endswith('.ase'):
+            shutil.move(downloads + '/' + download, 'D:\DownloadedImages/' + download)
 
-    for zipDownload in os.listdir(downloads):
-        if zipDownload.endswith('.zip'):
-            shutil.move(downloads + '/' + zipDownload, 'D:\DownloadedZIPS/' + zipDownload)
-            return 1
+        elif download.endswith('.zip'):
+            shutil.move(downloads + '/' + download, 'D:\DownloadedZIPS/' + download)
 
-    for pdfDownload in os.listdir(downloads):
-        if pdfDownload.endswith('.pdf') or pdfDownload.endswith('.docx'):
-            shutil.move(downloads + '/' + pdfDownload, 'D:\DownloadedPDF/' + pdfDownload)
-            return 1
-        
-    for mediaDownload in os.listdir(downloads):
-        if mediaDownload.endswith('.mp4') or mediaDownload.endswith('.mp3') or mediaDownload.endswith('.mov') or mediaDownload.endswith('.avi'):
-            shutil.move(downloads + '/' + mediaDownload, 'D:\DownloadedMedia/' + mediaDownload)
-            return 1
-        
-    for exeDownload in os.listdir(downloads):
-        if exeDownload.endswith('.exe'):
-            shutil.move(downloads + '/' + exeDownload, 'D:\DownloadedEXE/' + exeDownload)
-            return 1
-        
-def misc():
-    for miscDownload in os.listdir(downloads):
-        shutil.move(downloads + '/' + miscDownload, 'D:\DownloadedMisc/' + miscDownload)
+        elif download.endswith('.pdf') or download.endswith('.docx'):
+            shutil.move(downloads + '/' + download, 'D:\DownloadedPDF/' + download)
 
-def check():
-    if not sort():
-        misc()
+        elif download.endswith('.mp4') or download.endswith('.mp3') or download.endswith('.mov') or download.endswith('.avi'):
+            shutil.move(downloads + '/' + download, 'D:\DownloadedMedia/' + download)
+
+        elif download.endswith('.exe'):
+            shutil.move(downloads + '/' + download, 'D:\DownloadedEXE/' + download)
+
+        else:
+            shutil.move(downloads + '/' + download, 'D:\DownloadedMisc/' + download)
 
 my_event_handler.on_created = on_created
 my_event_handler.on_modified = on_modified
@@ -66,7 +52,7 @@ my_observer.schedule(my_event_handler, downloads, recursive=go_recursively)
 my_observer.start()
 try:
     while True:
-        check()
+        sort()
         time.sleep(1)
 except KeyboardInterrupt:
     my_observer.stop()
