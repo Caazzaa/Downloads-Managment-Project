@@ -1,4 +1,5 @@
 import os, shutil
+import random
 import time
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
@@ -23,23 +24,35 @@ def on_moved(event):
 
 def sort():
     for download in os.listdir(downloads):
-        if download.endswith('.jpg') or download.endswith('.png') or download.endswith('.gif') or download.endswith('.webp') or download.endswith('.jpeg') or download.endswith('.raw') or download.endswith('.ase'):
-            shutil.move(downloads + '/' + download, 'D:\DownloadedImages/' + download)
+        
+        if download.endswith('.tmp'):
+            break
+
+        elif download.endswith('.jpg') or download.endswith('.png') or download.endswith('.gif') or download.endswith('.webp') or download.endswith('.jpeg') or download.endswith('.raw') or download.endswith('.ase'):
+            shutil.move(downloads + '/' + download, 'D:\DownloadedImages/' + copy(download, 'D:\DownloadedImages/'))
 
         elif download.endswith('.zip'):
-            shutil.move(downloads + '/' + download, 'D:\DownloadedZIPS/' + download)
+            shutil.move(downloads + '/' + download, 'D:\DownloadedZIPS/' + copy(download, 'D:\DownloadedZIPS/'))
 
         elif download.endswith('.pdf') or download.endswith('.docx'):
-            shutil.move(downloads + '/' + download, 'D:\DownloadedPDF/' + download)
+            shutil.move(downloads + '/' + download, 'D:\DownloadedPDF/' + copy(download, 'D:\DownloadedPDF/'))
 
         elif download.endswith('.mp4') or download.endswith('.mp3') or download.endswith('.mov') or download.endswith('.avi'):
-            shutil.move(downloads + '/' + download, 'D:\DownloadedMedia/' + download)
+            shutil.move(downloads + '/' + download, 'D:\DownloadedMedia/' + copy(download, 'D:\DownloadedMedia/'))
 
         elif download.endswith('.exe'):
-            shutil.move(downloads + '/' + download, 'D:\DownloadedEXE/' + download)
+            shutil.move(downloads + '/' + download, 'D:\DownloadedEXE/' + copy(download, 'D:\DownloadedEXE/'))
 
         else:
-            shutil.move(downloads + '/' + download, 'D:\DownloadedMisc/' + download)
+            shutil.move(downloads + '/' + download, 'D:\DownloadedMisc/' + copy(download, 'D:\DownloadedMisc/'))
+
+def copy(download, path):
+    downloadCopy = download
+    while os.path.exists(path + downloadCopy):
+        num = random.randint(0, 1000)
+        index = download.find('.')
+        downloadCopy = download[:index] + str(num) + download[index:]
+    return downloadCopy
 
 my_event_handler.on_created = on_created
 my_event_handler.on_modified = on_modified
